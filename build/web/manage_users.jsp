@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.sunrisedental.dao.UserDAO, com.sunrisedental.model.User, java.util.List" %>
 <%@ page import="com.sunrisedental.dao.UserDAO, com.sunrisedental.model.User, java.util.List" %>
-<jsp:include page="header.jsp" />
+<%@ include file="header.jsp" %>
 
 <div class="dashboard-header">
     <h2>User Management</h2>
@@ -12,6 +12,22 @@
     <div class="col-md-4">
         <div class="auth-card" style="max-width: 100%;">
             <h3>Add New Staff</h3>
+            <% if (request.getParameter("error") != null) { %>
+                <div class="error" style="background:#ffebee; color:#c62828; padding:10px; border-radius:5px; margin-bottom:15px; text-align:center;">
+                    <% if("InvalidEmail".equals(request.getParameter("error"))) { %>
+                        Username must end with <strong>@gmail.com</strong>
+                    <% } else if("UsernameExists".equals(request.getParameter("error"))) { %>
+                        Username already exists!
+                    <% } else { %>
+                        Registration Failed!
+                    <% } %>
+                </div>
+            <% } %>
+            <% if (request.getParameter("msg") != null) { %>
+                <div style="background:#e8f5e9; color:#2e7d32; padding:10px; border-radius:5px; margin-bottom:15px; text-align:center;">
+                    Account Created Successfully!
+                </div>
+            <% } %>
             <form action="UserServlet" method="post">
                 <input type="hidden" name="action" value="register">
                 <input type="hidden" name="source" value="ADMIN">
@@ -78,4 +94,4 @@
     </div>
 </div>
 
-<jsp:include page="footer.jsp" />
+<%@ include file="footer.jsp" %>

@@ -9,7 +9,7 @@ import java.util.List;
 public class AppointmentDAO {
     
     public boolean registerAppointment(Appointment app) {
-        String query = "INSERT INTO appointments (appointment_number, patient_name, address, contact_number, dentist_name, treatment_type, appointment_date, appointment_time, consultation_fee, treatment_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO appointments (appointment_number, patient_name, address, contact_number, dentist_name, treatment_type, appointment_date, appointment_time, consultation_fee, treatment_cost, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING')";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             
@@ -232,6 +232,30 @@ public class AppointmentDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return list;
+    }
+
+    public List<Appointment> getAppointmentsByDate(String date) {
+        List<Appointment> list = new ArrayList<>();
+        String query = "SELECT * FROM appointments WHERE appointment_date = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, date);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Appointment app = new Appointment();
+                app.setAppointmentNumber(rs.getString("appointment_number"));
+                app.setPatientName(rs.getString("patient_name"));
+                app.setDentistName(rs.getString("dentist_name"));
+                app.setTreatmentType(rs.getString("treatment_type"));
+                app.setAppointmentDate(rs.getDate("appointment_date"));
+                app.setAppointmentTime(rs.getTime("appointment_time"));
+                app.setConsultationFee(rs.getDouble("consultation_fee"));
+                app.setTreatmentCost(rs.getDouble("treatment_cost"));
+                app.setStatus(rs.getString("status"));
+                list.add(app);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
 }

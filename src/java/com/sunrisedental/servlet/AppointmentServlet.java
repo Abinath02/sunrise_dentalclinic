@@ -21,10 +21,16 @@ public class AppointmentServlet extends HttpServlet {
         
         if ("updateTreatment".equals(action)) {
             String appNumber = request.getParameter("appNumber");
-            String remarks = request.getParameter("remarks");
+            String[] treatmentArray = request.getParameterValues("remarks");
+            String extraNotes = request.getParameter("extraNotes");
             double cost = Double.parseDouble(request.getParameter("cost"));
             
-            if (dao.updateTreatment(appNumber, remarks, cost)) {
+            String combinedRemarks = (treatmentArray != null) ? String.join(", ", treatmentArray) : "";
+            if(extraNotes != null && !extraNotes.trim().isEmpty()) {
+                combinedRemarks += (combinedRemarks.isEmpty() ? "" : " | ") + "Extra: " + extraNotes;
+            }
+            
+            if (dao.updateTreatment(appNumber, combinedRemarks, cost)) {
                 response.sendRedirect("doctor_dashboard.jsp?msg=Updated");
             } else {
                 response.sendRedirect("doctor_dashboard.jsp?error=Failed");
@@ -51,7 +57,10 @@ public class AppointmentServlet extends HttpServlet {
                 app.setAddress(request.getParameter("address"));
                 app.setContactNumber(request.getParameter("contact"));
                 app.setDentistName(request.getParameter("dentist"));
-                app.setTreatmentType(request.getParameter("treatment"));
+                // HANDLE MULTIPLE TREATMENTS
+                String[] treatments = request.getParameterValues("treatment");
+                String combinedTreatments = (treatments != null) ? String.join(", ", treatments) : "General Checkup";
+                app.setTreatmentType(combinedTreatments);
                 
                 String dateStr = request.getParameter("date");
                 if (dateStr != null && !dateStr.isEmpty()) {

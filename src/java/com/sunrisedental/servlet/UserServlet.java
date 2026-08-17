@@ -21,13 +21,22 @@ public class UserServlet extends HttpServlet {
         User currentUser = (User) session.getAttribute("user");
 
         if ("register".equals(action)) {
+            String username = request.getParameter("username");
+            String role = request.getParameter("role");
+            String source = request.getParameter("source");
+
+            // VALIDATION: Admin created usernames must end with @gmail.com
+            if ("ADMIN".equals(source) && !username.toLowerCase().endsWith("@gmail.com")) {
+                response.sendRedirect("manage_users.jsp?error=InvalidEmail");
+                return;
+            }
+
             User user = new User();
-            user.setUsername(request.getParameter("username"));
+            user.setUsername(username);
             user.setPassword(request.getParameter("password"));
             user.setFullName(request.getParameter("fullName"));
             
             // SECURITY: Only an Admin can set a role other than PATIENT
-            String role = request.getParameter("role");
             if (currentUser == null || !"ADMIN".equals(currentUser.getRole())) {
                 role = "PATIENT"; // Force PATIENT for public signup
             } else if (role == null || role.isEmpty()) {
@@ -36,13 +45,17 @@ public class UserServlet extends HttpServlet {
             user.setRole(role);
 
             if (userDAO.registerUser(user)) {
-                if ("ADMIN".equals(request.getParameter("source"))) {
+                if ("ADMIN".equals(source)) {
                     response.sendRedirect("manage_users.jsp?msg=UserAdded");
                 } else {
                     response.sendRedirect("login.jsp?msg=AccountCreated");
                 }
             } else {
-                response.sendRedirect("signup.jsp?error=UsernameExists");
+                if ("ADMIN".equals(source)) {
+                    response.sendRedirect("manage_users.jsp?error=UsernameExists");
+                } else {
+                    response.sendRedirect("signup.jsp?error=UsernameExists");
+                }
             }
         } else if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));

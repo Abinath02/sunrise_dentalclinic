@@ -3,20 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/src/java/com/sunrisedental/servlet/LoginServlet.java</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/src/java/com/sunrisedental/servlet/AppointmentServlet.java</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/web/login.jsp</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/src/java/com/sunrisedental/dao/AppointmentDAO.java</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/web/signup.jsp</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/web/search_appointment.jsp</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/web/admin_dashboard.jsp</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/web/billing.jsp</file>
+            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/web/appointment_history.jsp</file>
+            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/web/footer.jsp</file>
             <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/web/register_appointment.jsp</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/web/css/style.css</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/src/java/com/sunrisedental/servlet/UserServlet.java</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/src/java/com/sunrisedental/dao/UserDAO.java</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/src/java/com/sunrisedental/model/User.java</file>
-            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/web/patient_dashboard.jsp</file>
+            <file>file:/C:/Users/Abi/OneDrive%20-%20Cardiff%20Metropolitan%20University/Desktop/Advanced%20programming%20asignment/web/doctor_dashboard.jsp</file>
         </group>
     </open-files>
 </project-private>

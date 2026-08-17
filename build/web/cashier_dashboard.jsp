@@ -50,7 +50,7 @@
         <div class="col-4">
             <div class="auth-card">
                 <h3>Quick Actions</h3>
-                <a href="billing.jsp" class="btn-primary" style="display:block; text-align:center; margin-bottom:15px; text-decoration:none;">Process New Bill</a>
+                <a href="billing.jsp" class="btn-primary" style="display:block; text-align:center; margin-bottom:15px; text-decoration:none;">Pending Bills</a>
                 <a href="register_appointment.jsp" class="btn-primary" style="display:block; text-align:center; margin-bottom:15px; text-decoration:none; background:#344950;">Walk-in Booking</a>
             </div>
         </div>
