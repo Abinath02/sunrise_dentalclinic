@@ -69,6 +69,11 @@ public class AppointmentServlet extends HttpServlet {
                 
                 String timeStr = request.getParameter("time");
                 if (timeStr != null && !timeStr.isEmpty()) {
+                    // Deep validation for Clinic Hours (8:30 AM to 7:00 PM)
+                    if (timeStr.compareTo("08:30") < 0 || timeStr.compareTo("19:00") > 0) {
+                        response.sendRedirect("register_appointment.jsp?error=Invalid time. Clinic hours are 8:30 AM to 7:00 PM.");
+                        return;
+                    }
                     app.setAppointmentTime(Time.valueOf(timeStr + ":00"));
                 }
                 

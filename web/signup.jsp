@@ -124,14 +124,9 @@
     <div class="auth-container">
         <div class="auth-card">
             
-            <!-- Professional SVG Registration Icon -->
+            <!-- Professional Logo -->
             <div class="brand-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <line x1="19" y1="8" x2="19" y2="14"></line>
-                    <line x1="22" y1="11" x2="16" y2="11"></line>
-                </svg>
+                <img src="Logo.jpg" alt="Logo" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid #2563eb; object-fit: cover;">
             </div>
             
             <h1 class="brand-title">Join Sunrise Dental</h1>

@@ -8,7 +8,9 @@
     .booking-header { text-align: center; margin-bottom: 35px; }
     .booking-header h2 { color: #1e293b; font-weight: 700; margin-bottom: 8px; font-size: 28px; }
     .booking-header p { color: #64748b; font-size: 16px; margin: 0; }
-    
+
+    .alert-error { background: #fef2f2; color: #991b1b; padding: 16px; border-radius: 8px; margin-bottom: 25px; text-align: center; font-weight: 600; border: 1px solid #fecaca; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
     .alert-success { background: #ecfdf5; color: #065f46; padding: 16px; border-radius: 8px; margin-bottom: 25px; text-align: center; font-weight: 600; border: 1px solid #a7f3d0; display: flex; align-items: center; justify-content: center; gap: 8px; }
     
     .booking-card { display: flex; flex-wrap: wrap; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); overflow: hidden; border: 1px solid #f1f5f9; }
@@ -60,6 +62,13 @@
         </div>
     <% } %>
 
+    <% if (request.getParameter("error") != null) { %>
+        <div class="alert-error">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+            <%= request.getParameter("error") %>
+        </div>
+    <% } %>
+
     <form action="AppointmentServlet" method="post" id="bookingForm" class="booking-card">
         
         <!-- Left Section: Patient Details -->
@@ -108,8 +117,9 @@
                     <input type="date" class="form-control" name="date" required min="<%= new java.sql.Date(System.currentTimeMillis()) %>">
                 </div>
                 <div class="form-group">
-                    <label>Preferred Time</label>
-                    <input type="time" class="form-control" name="time" required>
+                    <label>Preferred Time (8:30 AM - 7:00 PM)</label>
+                    <input type="time" class="form-control" name="time" required min="08:30" max="19:00">
+                    <small style="color: #64748b; font-size: 11px; margin-top: 4px;">Clinic Hours: 08:30 to 19:00</small>
                 </div>
             </div>
         </div>
@@ -206,6 +216,19 @@
         });
         document.getElementById('hiddenTotal').value = total;
     }
+
+    // Client-side validation for time
+    document.getElementById('bookingForm').onsubmit = function(e) {
+        const timeInput = document.getElementsByName('time')[0];
+        const selectedTime = timeInput.value;
+
+        if (selectedTime < "08:30" || selectedTime > "19:00") {
+            alert("Please select a time between 8:30 AM and 7:00 PM.");
+            e.preventDefault();
+            return false;
+        }
+        return true;
+    };
 </script>
 
 <%@ include file="footer.jsp" %>

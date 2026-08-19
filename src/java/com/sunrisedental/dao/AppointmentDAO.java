@@ -192,6 +192,63 @@ public class AppointmentDAO {
         return list;
     }
 
+    public List<Appointment> getAppointmentsByDoctorAndStatus(String doctorName, String status) {
+        List<Appointment> list = new ArrayList<>();
+        String query = "SELECT * FROM appointments WHERE dentist_name = ? AND status = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, doctorName);
+            ps.setString(2, status);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Appointment app = new Appointment();
+                app.setAppointmentNumber(rs.getString("appointment_number"));
+                app.setPatientName(rs.getString("patient_name"));
+                app.setDentistName(rs.getString("dentist_name"));
+                app.setTreatmentType(rs.getString("treatment_type"));
+                app.setConsultationFee(rs.getDouble("consultation_fee"));
+                app.setTreatmentCost(rs.getDouble("treatment_cost"));
+                app.setAppointmentDate(rs.getDate("appointment_date"));
+                app.setAppointmentTime(rs.getTime("appointment_time"));
+                app.setStatus(rs.getString("status"));
+                list.add(app);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return list;
+    }
+
+    public List<Appointment> getTreatmentHistoryByDoctor(String doctorName) {
+        List<Appointment> list = new ArrayList<>();
+        String query = "SELECT * FROM appointments WHERE dentist_name = ? AND status IN ('TREATED', 'PAID') ORDER BY appointment_date DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, doctorName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Appointment app = new Appointment();
+                app.setAppointmentNumber(rs.getString("appointment_number"));
+                app.setPatientName(rs.getString("patient_name"));
+                app.setTreatmentType(rs.getString("treatment_type"));
+                app.setTreatmentCost(rs.getDouble("treatment_cost"));
+                app.setAppointmentDate(rs.getDate("appointment_date"));
+                app.setStatus(rs.getString("status"));
+                list.add(app);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return list;
+    }
+
+    public int getTodayPendingCountByDoctor(String doctorName) {
+        String query = "SELECT COUNT(*) FROM appointments WHERE dentist_name = ? AND status = 'PENDING' AND appointment_date = CURDATE()";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, doctorName);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) { e.printStackTrace(); }
+        return 0;
+    }
+
     public int getTodayPendingCount() {
         String query = "SELECT COUNT(*) FROM appointments WHERE status = 'PENDING' AND appointment_date = CURDATE()";
         try (Connection conn = DBConnection.getConnection();

@@ -3,89 +3,78 @@
 
 <style>
     /* Enhanced UI Styles */
-    .treatment-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        background: #f8f9fa;
-        padding: 15px;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-    }
-    .treatment-label {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        font-size: 14px;
-    }
-    .billing-section {
-        margin-top: 15px;
-        display: flex;
-        gap: 15px;
-        align-items: center;
-    }
-    .billing-input {
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        font-size: 14px;
-    }
-    .notes-input {
-        flex: 2; /* Takes more space for typing notes */
-    }
-    .extra-input {
-        flex: 1;
-        max-width: 120px;
-    }
-    .total-box {
-        display: flex;
-        align-items: center;
-        background: #e3f2fd; /* Light blue highlight */
-        border: 1px solid #bbdefb;
-        padding: 8px 15px;
-        border-radius: 8px;
-        flex: 1;
-        min-width: 180px; /* Prevents the box from shrinking */
-    }
-    .total-box span {
-        font-weight: bold;
-        color: #1565c0;
-        margin-right: 10px;
-    }
-    .total-box input {
-        border: none;
-        background: transparent;
-        font-size: 18px; /* Bigger font for total */
-        font-weight: bold;
-        color: #0d47a1;
-        width: 100%;
-        outline: none;
-    }
-    .btn-finalize {
-        background: #3498db;
-        color: white;
-        border: none;
-        padding: 12px;
-        border-radius: 8px;
-        cursor: pointer;
-        width: 100%;
-        font-weight: bold;
-        transition: 0.3s;
-    }
-    .btn-finalize:hover {
-        background: #2980b9;
-    }
+    .dashboard-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-bottom: 30px; }
+    .profile-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #3498db; margin-bottom: 15px; }
+    .profile-details h4 { margin: 5px 0; color: #2c3e50; }
+    .profile-details p { color: #7f8c8d; font-size: 14px; margin: 0; }
+
+    .stats-container { display: flex; gap: 15px; }
+    .stat-box { flex: 1; padding: 20px; border-radius: 12px; text-align: center; color: white; }
+    .stat-pending { background: #f39c12; }
+    .stat-completed { background: #27ae60; }
+    .stat-box h2 { margin: 10px 0 0 0; font-size: 32px; }
+
+    .treatment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0; }
+    .treatment-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+    .billing-section { margin-top: 15px; display: flex; gap: 15px; align-items: center; }
+    .billing-input { padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; }
+    .notes-input { flex: 2; }
+    .extra-input { flex: 1; max-width: 120px; }
+    .total-box { display: flex; align-items: center; background: #e3f2fd; border: 1px solid #bbdefb; padding: 8px 15px; border-radius: 8px; flex: 1; min-width: 180px; }
+    .total-box span { font-weight: bold; color: #1565c0; margin-right: 10px; }
+    .total-box input { border: none; background: transparent; font-size: 18px; font-weight: bold; color: #0d47a1; width: 100%; outline: none; }
+    .btn-finalize { background: #3498db; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s; }
+    .btn-finalize:hover { background: #2980b9; }
+
+    .history-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 30px; }
+    .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+    .status-treated { background: #e8f5e9; color: #2e7d32; }
+    .status-paid { background: #e3f2fd; color: #1565c0; }
 </style>
+
+<%
+    AppointmentDAO dao = new AppointmentDAO();
+    String doctorName = user.getFullName();
+    int pendingToday = dao.getTodayPendingCountByDoctor(doctorName);
+    List<Appointment> historyList = dao.getTreatmentHistoryByDoctor(doctorName);
+%>
 
 <div class="container">
     <div class="dashboard-header">
-        <h2>Doctor Treatment Portal</h2>
-        <p>Complete consultations by selecting treatments provided during the visit.</p>
+        <h2>Doctor Command Center</h2>
+        <p>Manage your daily consultations and review patient history.</p>
     </div>
 
+    <!-- Top Row: Profile & Stats -->
+    <div class="dashboard-grid">
+        <div class="profile-card">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <img src="Logo.jpg" alt="Doctor" class="profile-img">
+                <div class="profile-details">
+                    <h4>Dr. <%= doctorName %></h4>
+                    <p>Role: <%= user.getRole() %></p>
+                    <p>Username: @<%= user.getUsername() %></p>
+                    <p style="margin-top: 10px; font-weight: 600; color: #3498db;">Specialist Dentist</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-box stat-pending">
+                <p>Pending Today</p>
+                <h2><%= pendingToday %></h2>
+            </div>
+            <div class="stat-box stat-completed">
+                <p>Lifetime Treatments</p>
+                <h2><%= historyList.size() %></h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Middle Section: Pending Consultations -->
     <div class="auth-card" style="max-width: 100%;">
-        <h3>Pending Consultations</h3>
+        <h3>Pending Consultations for You</h3>
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr style="text-align: left; border-bottom: 2px solid #eee;">
@@ -97,18 +86,17 @@
             </thead>
             <tbody>
                 <%
-                    AppointmentDAO dao = new AppointmentDAO();
-                    List<Appointment> list = dao.getAppointmentsByStatus("PENDING");
-                    if(list.isEmpty()) {
+                    List<Appointment> pendingList = dao.getAppointmentsByDoctorAndStatus(doctorName, "PENDING");
+                    if(pendingList.isEmpty()) {
                 %>
-                    <tr><td colspan="4" style="text-align:center; padding: 20px;">No patients waiting at the moment.</td></tr>
+                    <tr><td colspan="4" style="text-align:center; padding: 20px;">Great job! No pending patients assigned to you.</td></tr>
                 <% } else {
-                    for(Appointment app : list) {
+                    for(Appointment app : pendingList) {
                 %>
                 <tr style="border-bottom: 1px solid #eee;">
                     <td style="padding: 15px 10px; vertical-align: top;">
                         <strong><%= app.getAppointmentNumber() %></strong><br>
-                        <small style="color: #777;"><%= app.getAppointmentDate() %></small>
+                        <small style="color: #777;"><%= app.getAppointmentDate() %> at <%= app.getAppointmentTime() %></small>
                     </td>
                     <td style="padding: 15px 10px; vertical-align: top;"><%= app.getPatientName() %></td>
                     <td style="padding: 15px 10px;">
@@ -139,9 +127,7 @@
 
                             <div class="billing-section">
                                 <input type="text" name="extraNotes" class="billing-input notes-input" placeholder="Additional notes...">
-                                
                                 <input type="number" id="extra-<%= app.getAppointmentNumber() %>" class="billing-input extra-input" placeholder="Extra LKR" value="0" oninput="calculateDoctorBill('<%= app.getAppointmentNumber() %>')">
-                                
                                 <div class="total-box">
                                     <span>Total: Rs.</span>
                                     <input type="number" name="cost" id="total-<%= app.getAppointmentNumber() %>" value="0" readonly>
@@ -157,6 +143,45 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Bottom Section: Treatment History -->
+    <div class="history-card">
+        <h3>Your Recent Treatment History</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+            <thead>
+                <tr style="text-align: left; border-bottom: 2px solid #eee;">
+                    <th style="padding: 12px;">Date</th>
+                    <th style="padding: 12px;">Appt #</th>
+                    <th style="padding: 12px;">Patient</th>
+                    <th style="padding: 12px;">Treatments Provided</th>
+                    <th style="padding: 12px;">Revenue (LKR)</th>
+                    <th style="padding: 12px;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    if(historyList.isEmpty()) {
+                %>
+                    <tr><td colspan="6" style="text-align:center; padding: 20px; color: #7f8c8d;">No history found.</td></tr>
+                <% } else {
+                    for(Appointment history : historyList) {
+                %>
+                <tr style="border-bottom: 1px solid #f8f9fa;">
+                    <td style="padding: 12px;"><%= history.getAppointmentDate() %></td>
+                    <td style="padding: 12px;"><strong><%= history.getAppointmentNumber() %></strong></td>
+                    <td style="padding: 12px;"><%= history.getPatientName() %></td>
+                    <td style="padding: 12px;"><%= history.getTreatmentType() %></td>
+                    <td style="padding: 12px; font-weight: 600;"><%= String.format("%.2f", history.getTreatmentCost()) %></td>
+                    <td style="padding: 12px;">
+                        <span class="status-badge <%= "PAID".equals(history.getStatus()) ? "status-paid" : "status-treated" %>">
+                            <%= history.getStatus() %>
+                        </span>
+                    </td>
+                </tr>
+                <% } } %>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
@@ -164,8 +189,6 @@
         let total = 0;
         const form = document.getElementById('form-' + appId);
         const checkboxes = form.querySelectorAll('input[name="remarks"]:checked');
-        
-        // Handle empty extra input cleanly
         const extraInput = document.getElementById('extra-' + appId).value;
         const extra = extraInput === "" ? 0 : parseFloat(extraInput);
 
@@ -173,7 +196,6 @@
             total += parseFloat(cb.getAttribute('data-price'));
         });
 
-        // Update the proper input field
         document.getElementById('total-' + appId).value = total + extra;
     }
 </script>

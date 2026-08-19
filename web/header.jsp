@@ -20,7 +20,10 @@
 </head>
 <body>
 <header>
-    <h1>Sunrise Dental Clinic</h1>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <img src="Logo.jpg" alt="Logo" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid white;">
+        <h1>Sunrise Dental Clinic</h1>
+    </div>
     <div class="user-info">
         <span>Welcome, <%= user.getFullName() %> (<%= user.getRole() %>)</span>
     </div>

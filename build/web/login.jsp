@@ -4,175 +4,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Sunrise Dental Clinic</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
+    <title>Sunrise Dental Clinic | Welcome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Professional Internal Styles (You can move this to your style.css) */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background: #f0f4f8; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
 
-        .auth-container {
-            width: 100%;
-            max-width: 420px;
-            padding: 20px;
-        }
+        /* Main Container */
+        .page-wrapper { display: flex; width: 100%; max-width: 1000px; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
 
-        .auth-card {
-            background: #ffffff;
-            padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            text-align: center;
-        }
+        /* Left Side: Brand & Info */
+        .info-panel { flex: 1; background: #2563eb; color: white; padding: 50px; display: flex; flex-direction: column; justify-content: center; }
+        .logo-img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid white; margin-bottom: 20px; }
+        .info-panel h2 { font-size: 32px; margin-bottom: 20px; }
+        .info-panel h4 { margin-top: 20px; opacity: 0.9; }
+        .info-panel p { font-size: 14px; opacity: 0.8; line-height: 1.6; margin-top: 10px; }
+        .location-section { margin-top: auto; padding-top: 20px; font-weight: 600; font-size: 15px; }
 
-        .brand-icon {
-            margin-bottom: 15px;
-        }
-
-        .brand-title {
-            margin: 0;
-            color: #0f172a;
-            font-size: 26px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-tagline {
-            color: #64748b;
-            font-size: 14px;
-            margin-top: 5px;
-            margin-bottom: 30px;
-        }
-
-        .error-alert {
-            background-color: #fef2f2;
-            color: #b91c1c;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 14px;
-            margin-bottom: 20px;
-            border: 1px solid #f87171;
-            text-align: left;
-        }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            color: #334155;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 14px;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .btn-primary {
-            width: 100%;
-            background-color: #2563eb;
-            color: #ffffff;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .btn-primary:hover {
-            background-color: #1d4ed8;
-        }
-
-        .auth-footer {
-            margin-top: 25px;
-            color: #64748b;
-            font-size: 14px;
-        }
-
-        .auth-footer a {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .auth-footer a:hover {
-            text-decoration: underline;
-        }
+        /* Right Side: Login Form */
+        .login-panel { flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center; }
+        .login-title { font-size: 28px; color: #0f172a; margin-bottom: 30px; font-weight: 700; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-group input { width: 100%; padding: 14px; border: 1px solid #e2e8f0; border-radius: 10px; }
+        .btn-primary { width: 100%; background: #2563eb; color: white; padding: 14px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-primary:hover { background: #1d4ed8; }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-card">
-            
-            <!-- Professional SVG Dental Icon -->
-            <div class="brand-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 21c-2.427-1.127-3.921-3.666-4.945-6.19C6.444 13.313 6 12.062 6 11c0-3.314 2.686-6 6-6s6 2.686 6 6c0 1.062-.444 2.313-1.055 3.81C15.921 17.334 14.427 19.873 12 21z"></path>
-                    <path d="M12 11v4"></path>
-                    <path d="M10 13h4"></path>
-                </svg>
-            </div>
-            
-            <h1 class="brand-title">Sunrise Dental</h1>
-            <p class="brand-tagline">Your Smile, Our Priority</p>
 
-            <!-- Error Message Block -->
-            <% if (request.getAttribute("error") != null) { %>
-                <div class="error-alert">
-                    ⚠️ <%= request.getAttribute("error") %>
-                </div>
-            <% } %>
+<div class="page-wrapper">
+    <!-- Left Panel -->
+    <div class="info-panel">
+        <img src="Logo.jpg" alt="Logo" class="logo-img">
+        <h2>Sunrise Dental Clinic</h2>
+        
+        <h4>Our Vision</h4>
+        <p>To redefine dental care excellence through innovation and compassionate service.</p>
+        
+        <h4>Our Mission</h4>
+        <p>To provide high-quality, accessible, and pain-free dental treatments to our community.</p>
 
-            <!-- Login Form -->
-            <form action="login" method="post">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required autocomplete="username">
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
-                </div>
-                
-                <button type="submit" class="btn-primary">Sign In</button>
-            </form>
-
-            <!-- Footer Link -->
-            <div class="auth-footer">
-                New to our clinic? <a href="signup.jsp">Register as Patient</a>
-            </div>
-            
+        <div class="location-section">
+            📍 No 69, Gotham City, Jaffna
         </div>
     </div>
+
+    <!-- Right Panel -->
+    <div class="login-panel">
+        <h1 class="login-title">Login to Account</h1>
+        
+        <% if (request.getAttribute("error") != null) { %>
+            <div style="color: #b91c1c; background: #fee2e2; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                ⚠️ <%= request.getAttribute("error") %>
+            </div>
+        <% } %>
+
+        <form action="login" method="post">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-primary">Sign In</button>
+        </form>
+        
+        <p style="margin-top: 20px; font-size: 14px; text-align: center;">
+            New patient? <a href="signup.jsp" style="color: #2563eb; font-weight: 600;">Register here</a>
+        </p>
+    </div>
+</div>
+
 </body>
 </html>
