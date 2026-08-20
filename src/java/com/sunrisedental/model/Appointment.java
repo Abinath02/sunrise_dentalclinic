@@ -8,6 +8,7 @@ public class Appointment {
     private String patientName;
     private String address;
     private String contactNumber;
+    private String email;
     private String dentistName;
     private String treatmentType;
     private Date appointmentDate;
@@ -27,6 +28,8 @@ public class Appointment {
     public void setAddress(String address) { this.address = address; }
     public String getContactNumber() { return contactNumber; }
     public void setContactNumber(String contactNumber) { this.contactNumber = contactNumber; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
     public String getDentistName() { return dentistName; }
     public void setDentistName(String dentistName) { this.dentistName = dentistName; }
     public String getTreatmentType() { return treatmentType; }

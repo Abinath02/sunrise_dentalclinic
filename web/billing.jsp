@@ -1,6 +1,16 @@
 <%@ page import="com.sunrisedental.dao.AppointmentDAO, com.sunrisedental.model.Appointment, java.util.List" %>
 <jsp:include page="header.jsp" />
 
+<style>
+    .auth-card table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 20px; border-radius: 12px; overflow: hidden; border: 1px solid #eef2f7; }
+    .auth-card th { background: #f8fafc; color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; padding: 15px; border-bottom: 2px solid #edf2f7; text-align: left; }
+    .auth-card td { padding: 15px; border-bottom: 1px solid #f1f5f9; color: #1e293b; font-size: 14px; }
+    .auth-card tr:last-child td { border-bottom: none; }
+    .auth-card tr:hover td { background-color: #f8fafc; }
+    .btn-collect { background: #ecfdf5; color: #059669; border: 1px solid #d1fae5; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-collect:hover { background: #d1fae5; transform: translateY(-1px); }
+</style>
+
 <div class="container">
     <div class="dashboard-header">
         <h2>Pending Bills Management</h2>
@@ -9,6 +19,14 @@
 
     <div class="auth-card" style="max-width: 100%;">
         <h3>Treated Patients - Waiting for Payment</h3>
+
+        <% if(request.getParameter("print") != null) { %>
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+                <span style="color: #166534; font-weight: 600;">✅ Payment Collected! If the receipt didn't pop up, click the button:</span>
+                <button onclick="reprintReceipt('<%= request.getParameter("print") %>')" class="btn-collect" style="background: #22c55e; color: white; border: none;">Open Receipt</button>
+            </div>
+        <% } %>
+
         <table>
             <thead>
                 <tr>
@@ -31,15 +49,15 @@
                         double total = app.getConsultationFee() + app.getTreatmentCost();
                 %>
                 <tr>
-                    <td><%= app.getPatientName() %></td>
-                    <td><%= app.getDentistName() %></td>
-                    <td><%= app.getTreatmentType() %></td>
-                    <td><strong>LKR <%= String.format("%.2f", total) %></strong></td>
+                    <td style="font-weight: 600;"><%= app.getPatientName() %></td>
+                    <td style="color: #64748b;">Dr. <%= app.getDentistName() %></td>
+                    <td><small><%= app.getTreatmentType() %></small></td>
+                    <td style="color: #059669; font-weight: 700;">LKR <%= String.format("%.2f", total) %></td>
                     <td>
                         <form action="AppointmentServlet" method="post">
                             <input type="hidden" name="action" value="pay">
                             <input type="hidden" name="appNumber" value="<%= app.getAppointmentNumber() %>">
-                            <button type="submit" class="btn-primary btn-sm" style="background:#27ae60;">Collect & Generate Receipt</button>
+                            <button type="submit" class="btn-collect">Collect & Receipt</button>
                         </form>
                     </td>
                 </tr>
@@ -57,6 +75,10 @@
     String qrData = "ID:" + b.getAppointmentNumber() + " | Patient:" + b.getPatientName() + " | Total:LKR" + String.format("%.2f", totalAmt) + " | Date:" + b.getAppointmentDate();
 %>
 <script>
+    function reprintReceipt(appId) {
+        window.location.href = "billing.jsp?print=" + appId;
+    }
+
     window.onload = function() {
         var printWin = window.open('', '', 'width=900,height=800');
         printWin.document.write('<html><head><title>Sunrise Dental - Invoice #<%= b.getAppointmentNumber() %></title>');
@@ -87,18 +109,24 @@
 
         printWin.document.write('<div class="total">Grand Total: LKR <%= String.format("%.2f", totalAmt) %></div>');
 
-        printWin.document.write('<div class="qr-section"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<%= java.net.URLEncoder.encode(qrData, "UTF-8") %>" /><br><small>Scan to verify patient record</small></div>');
+        printWin.document.write('<div class="qr-section">');
+        printWin.document.write('<img id="qrCode" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<%= java.net.URLEncoder.encode(qrData, "UTF-8") %>" alt="QR Code" />');
+        printWin.document.write('<br><small>Scan to verify patient record</small></div>');
 
         printWin.document.write('<div class="footer"><p>Thank you for trusting Sunrise Dental Clinic!</p><p>Get well soon!</p></div>');
         printWin.document.write('</div>');
 
-        printWin.document.write('</body></html>');
+        // Escape closing script tag to prevent breaking the outer JSP script block
+        printWin.document.write('<script>');
+        printWin.document.write('document.getElementById("qrCode").onload = function() {');
+        printWin.document.write('    window.focus();');
+        printWin.document.write('    window.print();');
+        printWin.document.write('};');
+        printWin.document.write('setTimeout(function() { window.print(); }, 3000);');
+        printWin.document.write('<\/script>');
 
-        setTimeout(function() {
-            printWin.focus();
-            printWin.print();
-            // printWin.close(); // Optional: close after print
-        }, 1000);
+        printWin.document.write('</body></html>');
+        printWin.document.close();
     }
 </script>
 <% } %>

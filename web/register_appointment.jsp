@@ -47,6 +47,9 @@
     
     .btn-submit { width: 100%; padding: 16px; margin-top: 20px; background: #10b981; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
     .btn-submit:hover { background: #059669; }
+    .payment-badge { background: #3b82f6; color: white; padding: 4px 10px; border-radius: 6px; font-size: 12px; margin-bottom: 10px; display: inline-block; }
+    .card-element { background: #fff; padding: 15px; border: 1px solid #cbd5e1; border-radius: 10px; margin-top: 10px; }
+    .card-row { display: flex; gap: 10px; margin-top: 10px; }
 </style>
 
 <div class="booking-wrapper">
@@ -106,10 +109,13 @@
                     <input type="tel" class="form-control" name="contact" placeholder="e.g. 077 123 4567" required>
                 </div>
                 <div class="form-group">
-                    <label>Home Address</label>
-                    <input type="text" class="form-control" name="address" placeholder="e.g. 123 Main St, City" required>
+                    <label>Email Address</label>
+                    <input type="email" class="form-control" name="email" placeholder="e.g. patient@gmail.com" required>
                 </div>
             </div>
+
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>Home Address</label>
 
             <div class="form-row">
                 <div class="form-group">
@@ -187,15 +193,34 @@
             </div>
 
             <div class="summary-box">
-                <span class="summary-label">Total Estimated Bill</span>
+                <div class="payment-badge">Secured Consultation Fee: LKR 1,000.00</div>
+                <span class="summary-label">Total Estimated Bill (Pay at Clinic)</span>
                 <div class="summary-total">LKR <span id="displayTotal">0.00</span></div>
                 
+                <!-- Card Payment Section -->
+                <div class="card-element">
+                    <div class="form-group" style="text-align: left;">
+                        <label style="color: #475569;">Card Number</label>
+                        <input type="text" class="form-control" placeholder="**** **** **** 1234" maxlength="19">
+                    </div>
+                    <div class="card-row">
+                        <div class="form-group" style="text-align: left;">
+                            <label style="color: #475569;">Expiry</label>
+                            <input type="text" class="form-control" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group" style="text-align: left;">
+                            <label style="color: #475569;">CVC</label>
+                            <input type="text" class="form-control" placeholder="***">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Hidden inputs for backend submission -->
                 <input type="hidden" name="treatmentCost" id="hiddenTotal" value="0">
-                <input type="hidden" name="consultationFee" value="0"> 
+                <input type="hidden" name="consultationFee" value="1000">
             </div>
 
-            <button type="submit" class="btn-submit">Confirm Booking</button>
+            <button type="submit" class="btn-submit">Pay LKR 1,000 & Confirm Booking</button>
         </div>
     </form>
 </div>

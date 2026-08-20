@@ -9,7 +9,7 @@ import java.util.List;
 public class AppointmentDAO {
     
     public boolean registerAppointment(Appointment app) {
-        String query = "INSERT INTO appointments (appointment_number, patient_name, address, contact_number, dentist_name, treatment_type, appointment_date, appointment_time, consultation_fee, treatment_cost, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING')";
+        String query = "INSERT INTO appointments (appointment_number, patient_name, address, contact_number, email, dentist_name, treatment_type, appointment_date, appointment_time, consultation_fee, treatment_cost, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING')";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             
@@ -17,16 +17,17 @@ public class AppointmentDAO {
             ps.setString(2, app.getPatientName());
             ps.setString(3, app.getAddress());
             ps.setString(4, app.getContactNumber());
-            ps.setString(5, app.getDentistName());
-            ps.setString(6, app.getTreatmentType());
-            ps.setDate(7, app.getAppointmentDate());
-            ps.setTime(8, app.getAppointmentTime());
-            ps.setDouble(9, app.getConsultationFee());
-            ps.setDouble(10, app.getTreatmentCost());
+            ps.setString(5, app.getEmail());
+            ps.setString(6, app.getDentistName());
+            ps.setString(7, app.getTreatmentType());
+            ps.setDate(8, app.getAppointmentDate());
+            ps.setTime(9, app.getAppointmentTime());
+            ps.setDouble(10, app.getConsultationFee());
+            ps.setDouble(11, app.getTreatmentCost());
             
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error registering appointment: " + e.getMessage());
         }
         return false;
     }
@@ -45,6 +46,7 @@ public class AppointmentDAO {
                 app.setPatientName(rs.getString("patient_name"));
                 app.setAddress(rs.getString("address"));
                 app.setContactNumber(rs.getString("contact_number"));
+                app.setEmail(rs.getString("email"));
                 app.setDentistName(rs.getString("dentist_name"));
                 app.setTreatmentType(rs.getString("treatment_type"));
                 app.setAppointmentDate(rs.getDate("appointment_date"));
@@ -55,7 +57,7 @@ public class AppointmentDAO {
                 return app;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error fetching appointment: " + e.getMessage());
         }
         return null;
     }
@@ -257,6 +259,21 @@ public class AppointmentDAO {
             if (rs.next()) return rs.getInt(1);
         } catch (SQLException e) { e.printStackTrace(); }
         return 0;
+    }
+
+    public boolean isSlotAvailable(String dentistName, Date date, Time time) {
+        String query = "SELECT COUNT(*) FROM appointments WHERE dentist_name = ? AND appointment_date = ? AND appointment_time = ? AND status != 'CANCELLED'";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, dentistName);
+            ps.setDate(2, date);
+            ps.setTime(3, time);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) == 0;
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return false;
     }
 
     public double getTodayIncome() {
