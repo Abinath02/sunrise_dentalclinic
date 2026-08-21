@@ -75,6 +75,20 @@
         <p style="margin-top: 20px; font-size: 14px; text-align: center;">
             New patient? <a href="signup.jsp" style="color: #2563eb; font-weight: 600;">Register here</a>
         </p>
+
+        <!-- Patient User Guide -->
+        <div style="margin-top: 40px; padding: 20px; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+            <h3 style="font-size: 16px; color: #1e293b; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Simple Patient Guide
+            </h3>
+            <ul style="font-size: 13px; color: #64748b; list-style: none; padding: 0;">
+                <li style="margin-bottom: 8px;"><strong>Step 1:</strong> Create an account using the "Register" link above.</li>
+                <li style="margin-bottom: 8px;"><strong>Step 2:</strong> Login and click "New Appointment" to book your visit.</li>
+                <li style="margin-bottom: 8px;"><strong>Step 3:</strong> Pay the 1,000 LKR booking fee via card to secure your slot.</li>
+                <li><strong>Step 4:</strong> Check your email for the confirmation bill and visit on your scheduled time.</li>
+            </ul>
+        </div>
     </div>
 </div>
 

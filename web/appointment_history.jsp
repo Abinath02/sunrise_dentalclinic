@@ -50,9 +50,16 @@
                     <td><%= app.getDentistName() %></td>
                     <td><%= app.getTreatmentType() %></td>
                     <td><span class="badge <%= app.getStatus() %>"><%= app.getStatus() %></span></td>
-                    <td>LKR <%= String.format("%.2f", app.getConsultationFee() + app.getTreatmentCost()) %></td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span>LKR <%= String.format("%.2f", app.getConsultationFee() + app.getTreatmentCost()) %></span>
+                            <% if("PAID".equals(app.getStatus()) || "TREATED".equals(app.getStatus())) { %>
+                                <button onclick="viewInvoice('<%= app.getAppointmentNumber() %>')" class="btn-sm" style="padding: 4px 8px; font-size: 11px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">View Bill</button>
+                            <% } %>
+                        </div>
+                    </td>
                 </tr>
-                <%
+<%
                             }
                         }
                     }
@@ -61,5 +68,12 @@
         </table>
     </div>
 </div>
+
+<script>
+function viewInvoice(appId) {
+    // Redirect to billing page with print parameter to trigger invoice
+    window.open("billing.jsp?print=" + appId, "_blank");
+}
+</script>
 
 <%@ include file="footer.jsp" %>

@@ -25,7 +25,20 @@ public class AppointmentDAO {
             ps.setDouble(10, app.getConsultationFee());
             ps.setDouble(11, app.getTreatmentCost());
             
-            return ps.executeUpdate() > 0;
+            boolean success = ps.executeUpdate() > 0;
+            
+            if (success) {
+                // Track the 1000 LKR Consultation Fee as immediate income
+                String billQuery = "INSERT INTO bills (appointment_number, patient_name, total_amount) VALUES (?, ?, ?)";
+                try (PreparedStatement psBill = conn.prepareStatement(billQuery)) {
+                    psBill.setString(1, app.getAppointmentNumber());
+                    psBill.setString(2, app.getPatientName());
+                    psBill.setDouble(3, app.getConsultationFee());
+                    psBill.executeUpdate();
+                }
+            }
+            
+            return success;
         } catch (SQLException e) {
             System.err.println("Error registering appointment: " + e.getMessage());
         }
@@ -101,7 +114,7 @@ public class AppointmentDAO {
         Appointment app = getAppointment(appNumber);
         if (app == null) return false;
 
-        double total = app.getConsultationFee() + app.getTreatmentCost();
+        double total = app.getTreatmentCost(); // Only bill the treatment cost part, as 1000 was already billed at booking
 
         Connection conn = null;
         try {
@@ -114,13 +127,15 @@ public class AppointmentDAO {
             psUpdate.setString(1, appNumber);
             psUpdate.executeUpdate();
 
-            // 2. Insert into bills table
-            String insertBillQuery = "INSERT INTO bills (appointment_number, patient_name, total_amount) VALUES (?, ?, ?)";
-            PreparedStatement psBill = conn.prepareStatement(insertBillQuery);
-            psBill.setString(1, appNumber);
-            psBill.setString(2, app.getPatientName());
-            psBill.setDouble(3, total);
-            psBill.executeUpdate();
+            // 2. Insert into bills table (Remaining amount)
+            if (total > 0) {
+                String insertBillQuery = "INSERT INTO bills (appointment_number, patient_name, total_amount) VALUES (?, ?, ?)";
+                PreparedStatement psBill = conn.prepareStatement(insertBillQuery);
+                psBill.setString(1, appNumber);
+                psBill.setString(2, app.getPatientName());
+                psBill.setDouble(3, total);
+                psBill.executeUpdate();
+            }
 
             conn.commit(); // Transaction success
             return true;
@@ -331,5 +346,49 @@ public class AppointmentDAO {
             }
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
+    }
+
+    // --- Analytics Methods ---
+
+    public java.util.Map<String, Double> getMonthlyIncomeData() {
+        java.util.Map<String, Double> data = new java.util.LinkedHashMap<>();
+        String query = "SELECT DATE_FORMAT(bill_date, '%b %Y') as month, SUM(total_amount) as total " +
+                       "FROM bills GROUP BY DATE_FORMAT(bill_date, '%Y-%m') ORDER BY bill_date LIMIT 6";
+        try (Connection conn = DBConnection.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(query)) {
+            while (rs.next()) {
+                data.put(rs.getString("month"), rs.getDouble("total"));
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return data;
+    }
+
+    public java.util.Map<String, Integer> getTreatmentFrequencyData() {
+        java.util.Map<String, Integer> data = new java.util.LinkedHashMap<>();
+        // Simple grouping. If treatments are multiple (comma separated), this treats the string as a whole.
+        String query = "SELECT treatment_type, COUNT(*) as count FROM appointments GROUP BY treatment_type ORDER BY count DESC LIMIT 5";
+        try (Connection conn = DBConnection.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(query)) {
+            while (rs.next()) {
+                data.put(rs.getString("treatment_type"), rs.getInt("count"));
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return data;
+    }
+
+    public java.util.Map<String, Integer> getPatientGrowthData() {
+        java.util.Map<String, Integer> data = new java.util.LinkedHashMap<>();
+        String query = "SELECT DATE_FORMAT(appointment_date, '%b %Y') as month, COUNT(*) as count " +
+                       "FROM appointments GROUP BY DATE_FORMAT(appointment_date, '%Y-%m') ORDER BY appointment_date LIMIT 6";
+        try (Connection conn = DBConnection.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(query)) {
+            while (rs.next()) {
+                data.put(rs.getString("month"), rs.getInt("count"));
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return data;
     }
 }

@@ -71,63 +71,73 @@
 <% if(request.getParameter("print") != null) {
     Appointment b = dao.getAppointment(request.getParameter("print"));
     double totalAmt = b.getConsultationFee() + b.getTreatmentCost();
-    // Data for QR Code
     String qrData = "ID:" + b.getAppointmentNumber() + " | Patient:" + b.getPatientName() + " | Total:LKR" + String.format("%.2f", totalAmt) + " | Date:" + b.getAppointmentDate();
 %>
 <script>
+    function openInvoice() {
+        var printWin = window.open('', '_blank', 'width=900,height=900');
+        if (!printWin) {
+            alert("Pop-up blocked! Please allow pop-ups to view the receipt.");
+            return;
+        }
+
+        var html = `
+            <html>
+            <head>
+                <title>Sunrise Dental - Invoice #<%= b.getAppointmentNumber() %></title>
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 40px; color: #333; }
+                    .invoice-box { max-width: 800px; margin: auto; padding: 30px; border: 1px solid #eee; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); }
+                    .header { display: flex; justify-content: space-between; border-bottom: 2px solid #3498db; padding-bottom: 20px; margin-bottom: 20px; }
+                    .header h1 { margin: 0; color: #2c3e50; }
+                    .item-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+                    .item-table th { background: #f8fafc; border-bottom: 1px solid #ddd; padding: 12px; text-align: left; }
+                    .item-table td { padding: 12px; border-bottom: 1px solid #eee; }
+                    .total { text-align: right; font-size: 20px; font-weight: bold; color: #2c3e50; }
+                    .qr-section { text-align: right; margin-top: 20px; }
+                </style>
+            </head>
+            <body>
+                <div class="invoice-box">
+                    <div class="header">
+                        <div><h1>SUNRISE DENTAL</h1><p>Professional Oral Care</p></div>
+                        <div><p><strong>Invoice #:</strong> <%= b.getAppointmentNumber() %></p><p><strong>Date:</strong> <%= b.getAppointmentDate() %></p></div>
+                    </div>
+                    <div style="margin-bottom: 40px;">
+                        <p><strong>Bill To:</strong> <%= b.getPatientName() %><br><%= b.getContactNumber() %><br><%= b.getAddress() %></p>
+                        <p><strong>Attended By:</strong> Dr. <%= b.getDentistName() %></p>
+                    </div>
+                    <table class="item-table">
+                        <thead><tr><th>Treatment</th><th style="text-align:right;">Amount (LKR)</th></tr></thead>
+                        <tbody><tr><td><%= b.getTreatmentType() %></td><td style="text-align:right;"><%= String.format("%.2f", totalAmt) %></td></tr></tbody>
+                    </table>
+                    <div class="total">Grand Total: LKR <%= String.format("%.2f", totalAmt) %></div>
+                    <div class="qr-section">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<%= java.net.URLEncoder.encode(qrData, "UTF-8") %>" />
+                        <br><small>Scan to verify patient record</small>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `;
+
+        printWin.document.open();
+        printWin.document.write(html);
+        printWin.document.close();
+
+        setTimeout(function() {
+            printWin.focus();
+            printWin.print();
+        }, 1000);
+    }
+
     function reprintReceipt(appId) {
-        window.location.href = "billing.jsp?print=" + appId;
+        openInvoice();
     }
 
     window.onload = function() {
-        var printWin = window.open('', '', 'width=900,height=800');
-        printWin.document.write('<html><head><title>Sunrise Dental - Invoice #<%= b.getAppointmentNumber() %></title>');
-        printWin.document.write('<style>');
-        printWin.document.write('body { font-family: "Segoe UI", Tahoma, sans-serif; padding: 40px; color: #333; }');
-        printWin.document.write('.invoice-box { max-width: 800px; margin: auto; padding: 30px; border: 1px solid #eee; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); font-size: 16px; line-height: 24px; }');
-        printWin.document.write('.header { display: flex; justify-content: space-between; border-bottom: 2px solid #3498db; padding-bottom: 20px; margin-bottom: 20px; }');
-        printWin.document.write('.header h1 { margin: 0; color: #2c3e50; }');
-        printWin.document.write('.details { margin-bottom: 40px; }');
-        printWin.document.write('.details table { width: 100%; border-collapse: collapse; }');
-        printWin.document.write('.details td { padding: 8px 0; }');
-        printWin.document.write('.item-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }');
-        printWin.document.write('.item-table th { background: #f8f9fa; border-bottom: 1px solid #ddd; padding: 12px; text-align: left; }');
-        printWin.document.write('.item-table td { padding: 12px; border-bottom: 1px solid #eee; }');
-        printWin.document.write('.total { text-align: right; font-size: 20px; font-weight: bold; color: #2c3e50; margin-top: 20px; }');
-        printWin.document.write('.footer { text-align: center; margin-top: 50px; color: #7f8c8d; font-style: italic; }');
-        printWin.document.write('.qr-section { text-align: right; margin-top: 20px; }');
-        printWin.document.write('</style></head><body>');
-
-        printWin.document.write('<div class="invoice-box">');
-        printWin.document.write('<div class="header"><div><h1>SUNRISE DENTAL</h1><p>Professional Oral Care</p></div><div><p><strong>Invoice #: </strong><%= b.getAppointmentNumber() %></p><p><strong>Date: </strong><%= b.getAppointmentDate() %></p></div></div>');
-
-        printWin.document.write('<div class="details"><table><tr><td><strong>Bill To:</strong><br><%= b.getPatientName() %><br><%= b.getContactNumber() %><br><%= b.getAddress() %></td><td style="text-align:right;"><strong>Attended By:</strong><br><%= b.getDentistName() %></td></tr></table></div>');
-
-        printWin.document.write('<table class="item-table"><thead><tr><th>Treatment Description</th><th style="text-align:right;">Amount (LKR)</th></tr></thead><tbody>');
-        printWin.document.write('<tr><td><%= b.getTreatmentType() %></td><td style="text-align:right;"><%= String.format("%.2f", totalAmt) %></td></tr>');
-        printWin.document.write('</tbody></table>');
-
-        printWin.document.write('<div class="total">Grand Total: LKR <%= String.format("%.2f", totalAmt) %></div>');
-
-        printWin.document.write('<div class="qr-section">');
-        printWin.document.write('<img id="qrCode" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<%= java.net.URLEncoder.encode(qrData, "UTF-8") %>" alt="QR Code" />');
-        printWin.document.write('<br><small>Scan to verify patient record</small></div>');
-
-        printWin.document.write('<div class="footer"><p>Thank you for trusting Sunrise Dental Clinic!</p><p>Get well soon!</p></div>');
-        printWin.document.write('</div>');
-
-        // Escape closing script tag to prevent breaking the outer JSP script block
-        printWin.document.write('<script>');
-        printWin.document.write('document.getElementById("qrCode").onload = function() {');
-        printWin.document.write('    window.focus();');
-        printWin.document.write('    window.print();');
-        printWin.document.write('};');
-        printWin.document.write('setTimeout(function() { window.print(); }, 3000);');
-        printWin.document.write('<\/script>');
-
-        printWin.document.write('</body></html>');
-        printWin.document.close();
-    }
+        openInvoice();
+    };
 </script>
 <% } %>
 

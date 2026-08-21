@@ -254,6 +254,14 @@
         }
         return true;
     };
+
+    // Show confirmation popup if success
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('msg') && urlParams.get('msg') === 'Success') {
+        setTimeout(() => {
+            alert("Success! Your appointment is confirmed.\n\nThe 1,000 LKR payment receipt has been sent to your email address.");
+        }, 500);
+    }
 </script>
 
 <%@ include file="footer.jsp" %>
