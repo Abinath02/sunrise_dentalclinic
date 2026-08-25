@@ -292,7 +292,7 @@ public class AppointmentDAO {
     }
 
     public double getTodayIncome() {
-        String query = "SELECT SUM(consultation_fee + treatment_cost) FROM appointments WHERE status = 'PAID' AND appointment_date = CURDATE()";
+        String query = "SELECT SUM(total_amount) FROM bills WHERE DATE(bill_date) = CURDATE()";
         try (Connection conn = DBConnection.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(query)) {
