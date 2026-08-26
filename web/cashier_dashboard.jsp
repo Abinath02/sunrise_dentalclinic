@@ -53,6 +53,14 @@
                 <a href="billing.jsp" class="btn-primary" style="display:block; text-align:center; margin-bottom:15px; text-decoration:none;">Pending Bills</a>
                 <a href="register_appointment.jsp" class="btn-primary" style="display:block; text-align:center; margin-bottom:15px; text-decoration:none; background:#344950;">Walk-in Booking</a>
             </div>
+
+            <div class="auth-card" style="margin-top: 20px; background: #f8fafc; border: 1px solid #cbd5e1;">
+                <h4 style="color: #2c3e50; font-size: 16px; margin-bottom: 10px;">Cashier Guidance</h4>
+                <p style="font-size: 13px; color: #475569; margin-bottom: 8px;">1. Navigate to Pending Bills to see patients who have completed their consultation.</p>
+                <p style="font-size: 13px; color: #475569; margin-bottom: 8px;">2. Click Collect and Receipt to process payment and print the official bill.</p>
+                <p style="font-size: 13px; color: #475569; margin-bottom: 8px;">3. The booking fee is already tracked; you only collect the remaining treatment cost.</p>
+                <p style="font-size: 13px; color: #475569;">4. Use Walk-in Booking to register patients who arrive directly at the clinic.</p>
+            </div>
         </div>
     </div>
 </div>

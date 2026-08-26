@@ -60,15 +60,12 @@
             </div>
         </div>
 
-        <div class="stats-container">
-            <div class="stat-box stat-pending">
-                <p>Pending Today</p>
-                <h2><%= pendingToday %></h2>
-            </div>
-            <div class="stat-box stat-completed">
-                <p>Lifetime Treatments</p>
-                <h2><%= historyList.size() %></h2>
-            </div>
+        <div class="profile-card">
+            <h4 style="color: #2c3e50; font-size: 16px; margin-bottom: 10px;">Portal Guidance</h4>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 5px;">1. The Pending Consultations table shows patients specifically assigned to you.</p>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 5px;">2. Select the treatments provided and add extra notes or costs if necessary.</p>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 5px;">3. Click Finalize and Bill to send the record to the cashier for payment collection.</p>
+            <p style="font-size: 13px; color: #475569;">4. Review your lifetime treatment count and history in the bottom section.</p>
         </div>
     </div>
 

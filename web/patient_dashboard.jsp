@@ -67,6 +67,14 @@
         </div>
 
         <div class="col-4">
+            <div class="auth-card" style="padding: 25px; margin-bottom: 20px; background: #f8fafc; border: 1px solid #cbd5e1;">
+                <h4 style="color: #2c3e50; font-size: 16px; margin-bottom: 10px;">Portal Guidance</h4>
+                <p style="font-size: 13px; color: #475569; margin-bottom: 8px;">1. Click Book Appointment Now to schedule a new visit with a doctor.</p>
+                <p style="font-size: 13px; color: #475569; margin-bottom: 8px;">2. A 1,000 LKR booking fee is required via card to confirm your slot.</p>
+                <p style="font-size: 13px; color: #475569; margin-bottom: 8px;">3. Review your past visits and payment status in the History table.</p>
+                <p style="font-size: 13px; color: #475569;">4. Ensure your registered email is correct to receive digital receipts.</p>
+            </div>
+
             <div class="auth-card" style="padding: 25px;">
                 <h3 style="margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Our Specialists</h3>
                 

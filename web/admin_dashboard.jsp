@@ -109,9 +109,12 @@
                 <a href="search_appointment.jsp" class="btn-primary" style="display:block; text-align:center; margin-bottom:15px; text-decoration:none; background:#344950;">Database Search</a>
             </div>
 
-            <div class="auth-card" style="margin-top: 20px; background: #f8fafc; border: 1px dashed #cbd5e1;">
-                <h4 style="color: #64748b; font-size: 14px;">Quick Tip</h4>
-                <p style="font-size: 13px; color: #94a3b8;">Use the charts to identify peak hours and popular services to optimize staff scheduling.</p>
+            <div class="auth-card" style="margin-top: 20px; background: #f8fafc; border: 1px solid #cbd5e1;">
+                <h4 style="color: #2c3e50; font-size: 16px; margin-bottom: 10px;">System Guidance</h4>
+                <p style="font-size: 13px; color: #475569; margin-bottom: 8px;">1. Use the Staff Management section to create or delete system users.</p>
+                <p style="font-size: 13px; color: #475569; margin-bottom: 8px;">2. Review the analytical charts to track monthly income and patient growth trends.</p>
+                <p style="font-size: 13px; color: #475569; margin-bottom: 8px;">3. The Today's Performance card shows real-time collection including booking fees.</p>
+                <p style="font-size: 13px; color: #475569;">4. Use Database Search to look up specific appointment records by their unique ID.</p>
             </div>
         </div>
     </div>
