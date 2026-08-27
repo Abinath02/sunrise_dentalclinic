@@ -2,8 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="header.jsp" %>
 
-<div class="container">
-    <div class="dashboard-header">
+<div class="dashboard-header">
         <h2>Appointment History</h2>
         <p>Filter and view patient appointments by date.</p>
     </div>
@@ -67,7 +66,6 @@
             </tbody>
         </table>
     </div>
-</div>
 
 <script>
 function viewInvoice(appId) {

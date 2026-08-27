@@ -10,8 +10,7 @@
     String userRole = (loggedInUser != null) ? loggedInUser.getRole() : "GUEST";
 %>
 
-<div class="container">
-    <div class="dashboard-header">
+<div class="dashboard-header">
         <h2>Patient Records & Management</h2>
         <p>Find appointments and update treatment status.</p>
     </div>
@@ -88,6 +87,5 @@
         </div>
     <% } 
     } %>
-</div>
 
 <%@ include file="footer.jsp" %>

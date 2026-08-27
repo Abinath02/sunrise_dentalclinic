@@ -5,8 +5,11 @@ import com.sunrisedental.util.DBConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AppointmentDAO {
+    private static final Logger LOGGER = Logger.getLogger(AppointmentDAO.class.getName());
     
     public boolean registerAppointment(Appointment app) {
         String query = "INSERT INTO appointments (appointment_number, patient_name, address, contact_number, email, dentist_name, treatment_type, appointment_date, appointment_time, consultation_fee, treatment_cost, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING')";
@@ -40,7 +43,7 @@ public class AppointmentDAO {
             
             return success;
         } catch (SQLException e) {
-            System.err.println("Error registering appointment: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Error registering appointment: " + app.getAppointmentNumber(), e);
         }
         return false;
     }
@@ -70,7 +73,7 @@ public class AppointmentDAO {
                 return app;
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching appointment: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Error fetching appointment: " + appNumber, e);
         }
         return null;
     }
@@ -92,7 +95,7 @@ public class AppointmentDAO {
                 list.add(app);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error fetching appointments for patient: " + patientName, e);
         }
         return list;
     }
@@ -105,7 +108,9 @@ public class AppointmentDAO {
             ps.setDouble(2, cost);
             ps.setString(3, appNumber);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error updating treatment for appointment: " + appNumber, e);
+        }
         return false;
     }
 
@@ -141,12 +146,16 @@ public class AppointmentDAO {
             return true;
         } catch (SQLException e) {
             if (conn != null) {
-                try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+                try { conn.rollback(); } catch (SQLException ex) { 
+                    LOGGER.log(Level.SEVERE, "Error during rollback for appointment: " + appNumber, ex);
+                }
             }
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error marking appointment as paid: " + appNumber, e);
         } finally {
             if (conn != null) {
-                try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+                try { conn.close(); } catch (SQLException e) { 
+                    LOGGER.log(Level.SEVERE, "Error closing connection for appointment: " + appNumber, e);
+                }
             }
         }
         return false;
@@ -171,7 +180,9 @@ public class AppointmentDAO {
                 app.setStatus("PAID");
                 list.add(app);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching bill history", e);
+        }
         return list;
     }
 
@@ -182,7 +193,9 @@ public class AppointmentDAO {
             ps.setString(1, status);
             ps.setString(2, appNumber);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error updating status for appointment: " + appNumber, e);
+        }
         return false;
     }
 
@@ -205,7 +218,9 @@ public class AppointmentDAO {
                 app.setStatus(rs.getString("status"));
                 list.add(app);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching appointments by status: " + status, e);
+        }
         return list;
     }
 
@@ -230,7 +245,9 @@ public class AppointmentDAO {
                 app.setStatus(rs.getString("status"));
                 list.add(app);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching appointments for doctor: " + doctorName + " with status: " + status, e);
+        }
         return list;
     }
 
@@ -251,7 +268,9 @@ public class AppointmentDAO {
                 app.setStatus(rs.getString("status"));
                 list.add(app);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching treatment history for doctor: " + doctorName, e);
+        }
         return list;
     }
 
@@ -262,7 +281,9 @@ public class AppointmentDAO {
             ps.setString(1, doctorName);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt(1);
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching today's pending count for doctor: " + doctorName, e);
+        }
         return 0;
     }
 
@@ -272,7 +293,9 @@ public class AppointmentDAO {
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(query)) {
             if (rs.next()) return rs.getInt(1);
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching today's total pending count", e);
+        }
         return 0;
     }
 
@@ -287,7 +310,9 @@ public class AppointmentDAO {
             if (rs.next()) {
                 return rs.getInt(1) == 0;
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error checking slot availability", e);
+        }
         return false;
     }
 
@@ -297,7 +322,9 @@ public class AppointmentDAO {
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(query)) {
             if (rs.next()) return rs.getDouble(1);
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching today's income", e);
+        }
         return 0.0;
     }
 
@@ -319,7 +346,7 @@ public class AppointmentDAO {
                 list.add(app);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error fetching all appointments", e);
         }
         return list;
     }
@@ -344,7 +371,9 @@ public class AppointmentDAO {
                 app.setStatus(rs.getString("status"));
                 list.add(app);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching appointments by date: " + date, e);
+        }
         return list;
     }
 
@@ -360,13 +389,14 @@ public class AppointmentDAO {
             while (rs.next()) {
                 data.put(rs.getString("month"), rs.getDouble("total"));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching monthly income data", e);
+        }
         return data;
     }
 
     public java.util.Map<String, Integer> getTreatmentFrequencyData() {
         java.util.Map<String, Integer> data = new java.util.LinkedHashMap<>();
-        // Simple grouping. If treatments are multiple (comma separated), this treats the string as a whole.
         String query = "SELECT treatment_type, COUNT(*) as count FROM appointments GROUP BY treatment_type ORDER BY count DESC LIMIT 5";
         try (Connection conn = DBConnection.getConnection();
              Statement st = conn.createStatement();
@@ -374,7 +404,9 @@ public class AppointmentDAO {
             while (rs.next()) {
                 data.put(rs.getString("treatment_type"), rs.getInt("count"));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching treatment frequency data", e);
+        }
         return data;
     }
 
@@ -388,7 +420,9 @@ public class AppointmentDAO {
             while (rs.next()) {
                 data.put(rs.getString("month"), rs.getInt("count"));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching patient growth data", e);
+        }
         return data;
     }
 }

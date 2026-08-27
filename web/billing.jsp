@@ -1,5 +1,5 @@
 <%@ page import="com.sunrisedental.dao.AppointmentDAO, com.sunrisedental.model.Appointment, java.util.List" %>
-<jsp:include page="header.jsp" />
+<%@ include file="header.jsp" %>
 
 <style>
     .auth-card table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 20px; border-radius: 12px; overflow: hidden; border: 1px solid #eef2f7; }
@@ -11,8 +11,7 @@
     .btn-collect:hover { background: #d1fae5; transform: translateY(-1px); }
 </style>
 
-<div class="container">
-    <div class="dashboard-header">
+<div class="dashboard-header">
         <h2>Pending Bills Management</h2>
         <p>Confirm payments and issue professional receipts for treated patients.</p>
     </div>
@@ -65,7 +64,6 @@
             </tbody>
         </table>
     </div>
-</div>
 
 <%-- Professional PDF-Style Receipt Window --%>
 <% if(request.getParameter("print") != null) {
@@ -141,4 +139,4 @@
 </script>
 <% } %>
 
-<jsp:include page="footer.jsp" />
+<%@ include file="footer.jsp" %>

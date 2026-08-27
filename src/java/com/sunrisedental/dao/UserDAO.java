@@ -10,8 +10,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserDAO {
+    private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getName());
+
     public User login(String username, String password) {
         String hashedPassword = PasswordUtil.hashPassword(password);
         String query = "SELECT * FROM users WHERE username = ? AND password = ?";
@@ -31,7 +35,7 @@ public class UserDAO {
                 return user;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error during login for user: " + username, e);
         }
         return null;
     }
@@ -49,7 +53,7 @@ public class UserDAO {
             
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error registering user: " + user.getUsername(), e);
         }
         return false;
     }
@@ -69,7 +73,7 @@ public class UserDAO {
                 list.add(user);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error fetching all users", e);
         }
         return list;
     }
@@ -85,7 +89,9 @@ public class UserDAO {
                 user.setFullName(rs.getString("full_name"));
                 list.add(user);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            LOGGER.log(Level.SEVERE, "Error fetching doctors", e);
+        }
         return list;
     }
 
@@ -96,7 +102,7 @@ public class UserDAO {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error deleting user with ID: " + id, e);
         }
         return false;
     }
