@@ -40,8 +40,7 @@
     List<Appointment> historyList = dao.getTreatmentHistoryByDoctor(doctorName);
 %>
 
-<div class="container">
-    <div class="dashboard-header">
+<div class="dashboard-header">
         <h2>Doctor Command Center</h2>
         <p>Manage your daily consultations and review patient history.</p>
     </div>
@@ -179,7 +178,6 @@
             </tbody>
         </table>
     </div>
-</div>
 
 <script>
     function calculateDoctorBill(appId) {

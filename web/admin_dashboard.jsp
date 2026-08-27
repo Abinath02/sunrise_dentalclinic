@@ -21,8 +21,7 @@
     .chart-title { font-size: 18px; font-weight: 600; color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #f8fafc; padding-bottom: 10px; }
 </style>
 
-<div class="container">
-    <div class="dashboard-header">
+<div class="dashboard-header">
         <h2>Admin Command Center</h2>
         <p>Real-time analytics and management for Sunrise Dental Clinic.</p>
     </div>
@@ -118,7 +117,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <script>
     // Data Preparation from JSP

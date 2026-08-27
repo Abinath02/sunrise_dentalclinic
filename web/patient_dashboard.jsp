@@ -15,8 +15,7 @@
     }
 %>
 
-<div class="container" style="margin-top: 30px; margin-bottom: 50px;">
-    <div class="dashboard-header" style="margin-bottom: 30px;">
+<div class="dashboard-header" style="margin-bottom: 30px;">
         <h2>My Patient Portal</h2>
         <p>Welcome back, <strong><%= loggedInUser.getFullName() %></strong>!</p>
     </div>
@@ -124,6 +123,5 @@
             </div>
         </div>
     </div>
-</div>
 
 <%@ include file="footer.jsp" %>

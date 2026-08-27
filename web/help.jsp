@@ -1,11 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Help & Onboarding - Sunrise Dental</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <style>
-        .help-section { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-top: 20px; }
+<%@ include file="header.jsp" %>
+
+<style>
+    .help-section { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-top: 20px; }
         .help-header { border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; margin-bottom: 30px; }
         .help-header h2 { color: #1e293b; font-size: 28px; margin: 0; }
         .role-guide { margin-bottom: 40px; padding: 25px; border-radius: 15px; border: 1px solid #e2e8f0; transition: transform 0.2s; }
@@ -16,12 +13,7 @@
         .step-list li::before { content: '→'; position: absolute; left: 0; color: #3b82f6; font-weight: bold; }
         .badge-info { background: #eff6ff; color: #1d4ed8; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; }
     </style>
-</head>
-<body>
-    <%@ include file="header.jsp" %>
-
-    <div class="container">
-        <div class="help-section">
+<div class="help-section">
             <div class="help-header">
                 <h2>Staff Training & System Guide</h2>
                 <p style="color: #64748b;">Follow these step-by-step instructions to master the Sunrise Dental Management System.</p>
@@ -69,8 +61,5 @@
                 </ul>
             </div>
         </div>
-    </div>
 
     <%@ include file="footer.jsp" %>
-</body>
-</html>

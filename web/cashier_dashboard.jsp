@@ -7,8 +7,7 @@
     double incomeToday = cDao.getTodayIncome();
 %>
 
-<div class="container">
-    <div class="dashboard-header">
+<div class="dashboard-header">
         <h2>Cashier Billing Console</h2>
         <p>Manage daily sales: <strong>Today's Collection: LKR <%= String.format("%.2f", incomeToday) %></strong></p>
     </div>
@@ -63,6 +62,5 @@
             </div>
         </div>
     </div>
-</div>
 
 <%@ include file="footer.jsp" %>
