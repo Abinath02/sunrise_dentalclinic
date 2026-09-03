@@ -42,7 +42,7 @@
             <% } %>
 
             <% if ("ADMIN".equals(user.getRole()) || "CASHIER".equals(user.getRole()) || "PATIENT".equals(user.getRole())) { %>
-                <li><a href="register_appointment.jsp"><i class="fas fa-calendar-plus"></i> New</a></li>
+                <li><a href="register_appointment.jsp"><i class="fas fa-calendar-plus"></i> Appointment</a></li>
             <% } %>
 
             <% if ("ADMIN".equals(user.getRole()) || "CASHIER".equals(user.getRole())) { %>
