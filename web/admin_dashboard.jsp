@@ -7,7 +7,6 @@
     int pendingToday = statDao.getTodayPendingCount();
     double incomeToday = statDao.getTodayIncome();
 
-    // Fetch Data for Charts
     Map<String, Double> incomeData = statDao.getMonthlyIncomeData();
     Map<String, Integer> treatmentData = statDao.getTreatmentFrequencyData();
     Map<String, Integer> growthData = statDao.getPatientGrowthData();
@@ -18,65 +17,49 @@
 
 <div class="row mb-4">
     <div class="col-12">
-        <div class="welcome-section shadow-sm">
-            <h2 class="fw-bold text-dark mb-1">Admin Command Center</h2>
-            <p class="text-muted mb-0">Real-time analytics and management for Sunrise Dental Clinic.</p>
+        <div class="welcome-section">
+            <h2 style="font-weight: 700; color: var(--dark);">Admin Command Center</h2>
+            <p style="color: var(--text-muted);">Real-time analytics and management for Sunrise Dental Clinic.</p>
         </div>
     </div>
 </div>
 
-<div class="row g-4 mb-4">
-    <div class="col-md-6 col-lg-3">
-        <div class="card stats-card bg-gradient-primary shadow-sm h-100">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="text-uppercase mb-2 opacity-75">Pending Today</h6>
-                    <h2 class="mb-0 fw-bold"><%= pendingToday %></h2>
-                </div>
-                <i class="fas fa-calendar-check fa-2x opacity-50"></i>
-            </div>
+<div class="stats-grid">
+    <div class="stat-card bg-primary">
+        <div>
+            <h6>Pending Today</h6>
+            <h2><%= pendingToday %></h2>
         </div>
+        <i class="fas fa-calendar-check fa-2x" style="opacity: 0.5;"></i>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card stats-card bg-gradient-success shadow-sm h-100">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="text-uppercase mb-2 opacity-75">Today's Collection</h6>
-                    <h2 class="mb-0 fw-bold">LKR <%= String.format("%.2f", incomeToday) %></h2>
-                </div>
-                <i class="fas fa-money-bill-wave fa-2x opacity-50"></i>
-            </div>
+    <div class="stat-card bg-success">
+        <div>
+            <h6>Today's Collection</h6>
+            <h2>LKR <%= String.format("%.2f", incomeToday) %></h2>
         </div>
+        <i class="fas fa-money-bill-wave fa-2x" style="opacity: 0.5;"></i>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card stats-card bg-gradient-info shadow-sm h-100">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="text-uppercase mb-2 opacity-75">Active Staff</h6>
-                    <h2 class="mb-0 fw-bold">12</h2>
-                </div>
-                <i class="fas fa-user-nurse fa-2x opacity-50"></i>
-            </div>
+    <div class="stat-card bg-info">
+        <div>
+            <h6>Active Staff</h6>
+            <h2>12</h2>
         </div>
+        <i class="fas fa-user-nurse fa-2x" style="opacity: 0.5;"></i>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card stats-card bg-gradient-warning shadow-sm h-100">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="text-uppercase mb-2 opacity-75">Patient Satisfaction</h6>
-                    <h2 class="mb-0 fw-bold">98%</h2>
-                </div>
-                <i class="fas fa-smile fa-2x opacity-50"></i>
-            </div>
+    <div class="stat-card bg-warning">
+        <div>
+            <h6>Patient Satisfaction</h6>
+            <h2>98%</h2>
         </div>
+        <i class="fas fa-smile fa-2x" style="opacity: 0.5;"></i>
     </div>
 </div>
 
-<div class="row g-4 mb-4">
-    <div class="col-lg-8">
-        <div class="card shadow-sm mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold text-dark">Monthly Revenue Trends</h5>
+<div class="row">
+    <div class="col-8">
+        <div class="card">
+            <div class="card-header">
+                <span>Monthly Revenue Trends</span>
                 <i class="fas fa-chart-line text-primary"></i>
             </div>
             <div class="card-body">
@@ -84,104 +67,81 @@
             </div>
         </div>
 
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header">
-                        <h6 class="mb-0 fw-bold">Treatment Popularity</h6>
-                    </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">Treatment Popularity</div>
                     <div class="card-body">
                         <canvas id="treatmentChart"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header">
-                        <h6 class="mb-0 fw-bold">Patient Growth</h6>
-                    </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">Patient Growth</div>
                     <div class="card-body">
                         <canvas id="growthChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="card">
+            <div class="card-header">Recent Collection History</div>
+            <div class="card-body" style="padding: 0;">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="padding-left: 1.5rem;">Bill Date</th>
+                                <th>Patient</th>
+                                <th>Doctor</th>
+                                <th style="text-align: right; padding-right: 1.5rem;">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                List<Appointment> bills = statDao.getBillHistory();
+                                if(bills.isEmpty()) {
+                            %>
+                                <tr><td colspan="4" style="text-align: center; padding: 2rem;">No collections recorded yet.</td></tr>
+                            <% } else {
+                                for(int i=0; i<Math.min(bills.size(), 5); i++) {
+                                    Appointment b = bills.get(i);
+                            %>
+                            <tr>
+                                <td style="padding-left: 1.5rem; color: var(--text-muted);"><%= b.getAppointmentDate() %></td>
+                                <td style="font-weight: 500;"><%= b.getPatientName() %></td>
+                                <td><span class="badge" style="background: #f1f5f9; color: var(--dark); border: 1px solid var(--border);">Dr. <%= b.getDentistName() %></span></td>
+                                <td style="text-align: right; padding-right: 1.5rem; font-weight: 700; color: var(--primary);">LKR <%= String.format("%.2f", b.getTreatmentCost()) %></td>
+                            </tr>
+                            <% } } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="col-lg-4">
-        <div class="card shadow-sm mb-4">
-            <div class="card-header">
-                <h5 class="mb-0 fw-bold text-dark">Quick Actions</h5>
-            </div>
-            <div class="card-body d-grid gap-2">
-                <a href="register_appointment.jsp" class="btn btn-primary py-2 shadow-sm">
-                    <i class="fas fa-plus-circle me-2"></i>New Appointment
-                </a>
-                <a href="manage_users.jsp" class="btn btn-dark py-2 shadow-sm">
-                    <i class="fas fa-users-cog me-2"></i>Manage Staff
-                </a>
-                <a href="search_appointment.jsp" class="btn btn-outline-primary py-2 shadow-sm">
-                    <i class="fas fa-search me-2"></i>Database Search
-                </a>
+    <div class="col-4">
+        <div class="card">
+            <div class="card-header">Quick Actions</div>
+            <div class="card-body">
+                <a href="register_appointment.jsp" class="btn btn-primary w-100 mb-4"><i class="fas fa-plus-circle"></i> New Appointment</a>
+                <a href="manage_users.jsp" class="btn btn-dark w-100 mb-4"><i class="fas fa-users-cog"></i> Manage Staff</a>
+                <a href="search_appointment.jsp" class="btn btn-primary w-100" style="background: transparent; border: 1px solid var(--primary); color: var(--primary);"><i class="fas fa-search"></i> Database Search</a>
             </div>
         </div>
 
-        <div class="card shadow-sm bg-light border-0">
+        <div class="card" style="background: #f8fafc; border: 1px solid var(--border);">
             <div class="card-body">
-                <h6 class="fw-bold text-dark mb-3"><i class="fas fa-info-circle me-2 text-primary"></i>System Guidance</h6>
-                <ul class="list-unstyled small text-muted mb-0">
-                    <li class="mb-2 d-flex align-items-start">
-                        <i class="fas fa-check-circle text-success me-2 mt-1"></i>
-                        <span>Manage clinic staff and their roles from the Users section.</span>
-                    </li>
-                    <li class="mb-2 d-flex align-items-start">
-                        <i class="fas fa-check-circle text-success me-2 mt-1"></i>
-                        <span>Monitor revenue and patient growth trends in real-time.</span>
-                    </li>
-                    <li class="mb-2 d-flex align-items-start">
-                        <i class="fas fa-check-circle text-success me-2 mt-1"></i>
-                        <span>Quickly search any patient or appointment using the database search.</span>
-                    </li>
+                <h6 style="font-weight: 700; margin-bottom: 1rem;"><i class="fas fa-info-circle text-primary"></i> System Guidance</h6>
+                <ul style="list-style: none; font-size: 0.85rem; color: var(--text-muted);">
+                    <li class="mb-4"><i class="fas fa-check-circle text-success"></i> Manage clinic staff and their roles from the Users section.</li>
+                    <li class="mb-4"><i class="fas fa-check-circle text-success"></i> Monitor revenue and patient growth trends in real-time.</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Quickly search any patient or appointment.</li>
                 </ul>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="card shadow-sm mb-4">
-    <div class="card-header bg-white">
-        <h5 class="mb-0 fw-bold text-dark">Recent Collection History</h5>
-    </div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th class="ps-4">Bill Date</th>
-                        <th>Patient</th>
-                        <th>Doctor</th>
-                        <th class="text-end pe-4">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%
-                        List<Appointment> bills = statDao.getBillHistory();
-                        if(bills.isEmpty()) {
-                    %>
-                        <tr><td colspan="4" class="text-center py-4 text-muted">No collections recorded yet.</td></tr>
-                    <% } else {
-                        for(int i=0; i<Math.min(bills.size(), 5); i++) {
-                            Appointment b = bills.get(i);
-                    %>
-                    <tr>
-                        <td class="ps-4 text-muted small"><%= b.getAppointmentDate() %></td>
-                        <td class="fw-medium"><%= b.getPatientName() %></td>
-                        <td><span class="badge bg-light text-dark fw-normal border">Dr. <%= b.getDentistName() %></span></td>
-                        <td class="text-end pe-4 fw-bold text-primary">LKR <%= String.format("%.2f", b.getTreatmentCost()) %></td>
-                    </tr>
-                    <% } } %>
-                </tbody>
-            </table>
         </div>
     </div>
 </div>

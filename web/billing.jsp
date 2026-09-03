@@ -1,75 +1,73 @@
 <%@ page import="com.sunrisedental.dao.AppointmentDAO, com.sunrisedental.model.Appointment, java.util.List" %>
 <%@ include file="header.jsp" %>
 
-<style>
-    .auth-card table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 20px; border-radius: 12px; overflow: hidden; border: 1px solid #eef2f7; }
-    .auth-card th { background: #f8fafc; color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; padding: 15px; border-bottom: 2px solid #edf2f7; text-align: left; }
-    .auth-card td { padding: 15px; border-bottom: 1px solid #f1f5f9; color: #1e293b; font-size: 14px; }
-    .auth-card tr:last-child td { border-bottom: none; }
-    .auth-card tr:hover td { background-color: #f8fafc; }
-    .btn-collect { background: #ecfdf5; color: #059669; border: 1px solid #d1fae5; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-    .btn-collect:hover { background: #d1fae5; transform: translateY(-1px); }
-</style>
-
-<div class="dashboard-header">
-        <h2>Pending Bills Management</h2>
-        <p>Confirm payments and issue professional receipts for treated patients.</p>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="welcome-section" style="border-left-color: var(--success);">
+            <h2 style="font-weight: 700; color: var(--dark);">Pending Bills Management</h2>
+            <p style="color: var(--text-muted);">Confirm payments and issue professional receipts for treated patients.</p>
+        </div>
     </div>
+</div>
 
-    <div class="auth-card" style="max-width: 100%;">
-        <h3>Treated Patients - Waiting for Payment</h3>
-
+<div class="card">
+    <div class="card-header">Treated Patients - Waiting for Payment</div>
+    <div class="card-body" style="padding: 0;">
         <% if(request.getParameter("print") != null) { %>
-            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
-                <span style="color: #166534; font-weight: 600;">✅ Payment Collected! If the receipt didn't pop up, click the button:</span>
-                <button onclick="reprintReceipt('<%= request.getParameter("print") %>')" class="btn-collect" style="background: #22c55e; color: white; border: none;">Open Receipt</button>
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 1.5rem; margin: 1.5rem; border-radius: 12px; display: flex; align-items: center; justify-content: space-between;">
+                <span style="color: #166534; font-weight: 700;"><i class="fas fa-check-circle"></i> Payment Collected! Opening receipt...</span>
+                <button onclick="reprintReceipt('<%= request.getParameter("print") %>')" class="btn btn-success">Open Receipt</button>
             </div>
         <% } %>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Patient</th>
-                    <th>Doctor</th>
-                    <th>Treatments Given</th>
-                    <th>Total Bill</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%
-                    AppointmentDAO dao = new AppointmentDAO();
-                    List<Appointment> list = dao.getAppointmentsByStatus("TREATED");
-                    if(list.isEmpty()) {
-                %>
-                    <tr><td colspan="5" style="text-align:center;">No pending bills found.</td></tr>
-                <% } else {
-                    for(Appointment app : list) {
-                        double total = app.getConsultationFee() + app.getTreatmentCost();
-                %>
-                <tr>
-                    <td style="font-weight: 600;"><%= app.getPatientName() %></td>
-                    <td style="color: #64748b;">Dr. <%= app.getDentistName() %></td>
-                    <td><small><%= app.getTreatmentType() %></small></td>
-                    <td style="color: #059669; font-weight: 700;">LKR <%= String.format("%.2f", total) %></td>
-                    <td>
-                        <form action="AppointmentServlet" method="post">
-                            <input type="hidden" name="action" value="pay">
-                            <input type="hidden" name="appNumber" value="<%= app.getAppointmentNumber() %>">
-                            <button type="submit" class="btn-collect">Collect & Receipt</button>
-                        </form>
-                    </td>
-                </tr>
-                <% } } %>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="padding-left: 1.5rem;">Patient</th>
+                        <th>Doctor</th>
+                        <th>Treatments Given</th>
+                        <th>Total Bill</th>
+                        <th style="text-align: right; padding-right: 1.5rem;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                        AppointmentDAO dao = new AppointmentDAO();
+                        List<Appointment> list = dao.getAppointmentsByStatus("TREATED");
+                        if(list.isEmpty()) {
+                    %>
+                        <tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-muted);">No pending bills found.</td></tr>
+                    <% } else {
+                        for(Appointment app : list) {
+                            double total = app.getConsultationFee() + app.getTreatmentCost();
+                    %>
+                    <tr>
+                        <td style="padding-left: 1.5rem; font-weight: 600;"><%= app.getPatientName() %></td>
+                        <td style="color: var(--text-muted);">Dr. <%= app.getDentistName() %></td>
+                        <td style="font-size: 0.8rem; color: var(--text-muted);"><%= app.getTreatmentType() %></td>
+                        <td style="color: var(--success); font-weight: 700;">LKR <%= String.format("%.2f", total) %></td>
+                        <td style="text-align: right; padding-right: 1.5rem;">
+                            <form action="AppointmentServlet" method="post" style="margin: 0;">
+                                <input type="hidden" name="action" value="pay">
+                                <input type="hidden" name="appNumber" value="<%= app.getAppointmentNumber() %>">
+                                <button type="submit" class="btn btn-success" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Collect & Receipt</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% } } %>
+                </tbody>
+            </table>
+        </div>
     </div>
+</div>
 
 <%-- Professional PDF-Style Receipt Window --%>
 <% if(request.getParameter("print") != null) {
     Appointment b = dao.getAppointment(request.getParameter("print"));
-    double totalAmt = b.getConsultationFee() + b.getTreatmentCost();
-    String qrData = "ID:" + b.getAppointmentNumber() + " | Patient:" + b.getPatientName() + " | Total:LKR" + String.format("%.2f", totalAmt) + " | Date:" + b.getAppointmentDate();
+    if(b != null) {
+        double totalAmt = b.getConsultationFee() + b.getTreatmentCost();
+        String qrData = "ID:" + b.getAppointmentNumber() + " | Patient:" + b.getPatientName() + " | Total:LKR" + String.format("%.2f", totalAmt) + " | Date:" + b.getAppointmentDate();
 %>
 <script>
     function openInvoice() {
@@ -86,12 +84,12 @@
                 <style>
                     body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 40px; color: #333; }
                     .invoice-box { max-width: 800px; margin: auto; padding: 30px; border: 1px solid #eee; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); }
-                    .header { display: flex; justify-content: space-between; border-bottom: 2px solid #3498db; padding-bottom: 20px; margin-bottom: 20px; }
-                    .header h1 { margin: 0; color: #2c3e50; }
+                    .header { display: flex; justify-content: space-between; border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 20px; }
+                    .header h1 { margin: 0; color: #0f172a; }
                     .item-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
                     .item-table th { background: #f8fafc; border-bottom: 1px solid #ddd; padding: 12px; text-align: left; }
                     .item-table td { padding: 12px; border-bottom: 1px solid #eee; }
-                    .total { text-align: right; font-size: 20px; font-weight: bold; color: #2c3e50; }
+                    .total { text-align: right; font-size: 20px; font-weight: bold; color: #0f172a; }
                     .qr-section { text-align: right; margin-top: 20px; }
                 </style>
             </head>
@@ -137,6 +135,6 @@
         openInvoice();
     };
 </script>
-<% } %>
+<% } } %>
 
 <%@ include file="footer.jsp" %>
